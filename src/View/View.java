@@ -278,6 +278,7 @@ public class View extends javax.swing.JFrame {
                 Equipos.Post(new EquipoModel(tboxsNombre.getText(), tboxsEstadio.getText(), new URL(tboxuEscudo.getText()), new URL(tboxuEstadio.getText())));
                 Listar(Equipos.getEquipos());
                 Vaciar();
+                JOptionPane.showMessageDialog(null, "Se ha registrado satisfactoriamente", "Registrado", 1);
             } catch (MalformedURLException ex) {
                 JOptionPane.showMessageDialog(null, "Ha ocurrido algun error intente de nuevo", "Error", 0);
             }
@@ -290,6 +291,7 @@ public class View extends javax.swing.JFrame {
                 Equipos.Put(Integer.parseInt(Index.toString()), new EquipoModel(tboxsNombre.getText(), tboxsEstadio.getText(), new URL(tboxuEscudo.getText()), new URL(tboxuEstadio.getText())));
                 Listar(Equipos.getEquipos());
                 Vaciar();
+                JOptionPane.showMessageDialog(null, "Se ha modificado satisfactoriamente", "Modificado", 1);
             } catch (MalformedURLException ex) { JOptionPane.showMessageDialog(null, "Ha ocurrido algun error intente de nuevo", "Error", 0);}
         }else{
             JOptionPane.showMessageDialog(null, "Debe seleccionar alguna fila de la tabla", "Error", 0);
@@ -313,14 +315,17 @@ public class View extends javax.swing.JFrame {
             Equipos.Delete(Integer.parseInt(Index.toString()));
             Vaciar();
             Listar(Equipos.getEquipos());
+            JOptionPane.showMessageDialog(null, "Se ha eliminado satisfactoriamente", "Eliminado", 1);
         }else{
             JOptionPane.showMessageDialog(null, "Debe seleccionar alguna fila de la tabla", "Error", 0);
         }
     }//GEN-LAST:event_btnElimActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        if(tboxsbuscar.getText() != null && !tboxsbuscar.equals("")){
+        if(tboxsbuscar.getText() != null && !tboxsbuscar.getText().equals("")){
             Listar(Equipos.Get(tboxsbuscar.getText()));
+        }else{
+            JOptionPane.showMessageDialog(null, "Debe ingresar algun filtro", "Error", 0);
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
