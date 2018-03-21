@@ -4,6 +4,7 @@ import Controller.EquipoController;
 import Model.EquipoModel;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -11,25 +12,13 @@ public class View extends javax.swing.JFrame {
 
     private EquipoController Equipos = new EquipoController();
     private final DefaultTableModel Table;
+    private Object Index;
 
     public View() {
         initComponents();
         setLocationRelativeTo(null);
         this.Table = (DefaultTableModel) TableEquipos.getModel();
-        Listar();
-    }
-
-    private boolean ValEquipos() {
-        if (tboxsNombre.getText().equals("") || tboxsNombre.getText() == null || tboxsEstadio.getText().equals("") || tboxsEstadio.getText() == null
-                || tboxuEscudo.getText().equals("") || tboxuEscudo.getText() == null || tboxuEstadio.getText().equals("") || tboxuEstadio.getText() == null) {
-            JOptionPane.showMessageDialog(null, "Debe ingresar todos los campos requeridos", "Error", 0);
-            return false;
-        } else if (!Equipos.ValUrl(tboxuEscudo.getText()) || !Equipos.ValUrl(tboxuEstadio.getText())) {
-            JOptionPane.showMessageDialog(null, "Debe ingresar solo url de imagen", "Error", 0);
-            return false;
-        } else {
-            return true;
-        }
+        Listar(Equipos.getEquipos());
     }
 
     @SuppressWarnings("unchecked")
@@ -87,9 +76,13 @@ public class View extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        TableEquipos.setColumnSelectionAllowed(true);
+        TableEquipos.getTableHeader().setReorderingAllowed(false);
+        TableEquipos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TableEquiposMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(TableEquipos);
-        TableEquipos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         if (TableEquipos.getColumnModel().getColumnCount() > 0) {
             TableEquipos.getColumnModel().getColumn(0).setResizable(false);
             TableEquipos.getColumnModel().getColumn(1).setResizable(false);
@@ -107,6 +100,11 @@ public class View extends javax.swing.JFrame {
 
         btnMod.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Update.png"))); // NOI18N
         btnMod.setText("Modificar");
+        btnMod.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModActionPerformed(evt);
+            }
+        });
 
         btnReg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Add.png"))); // NOI18N
         btnReg.setText("Registrar");
@@ -253,20 +251,65 @@ public class View extends javax.swing.JFrame {
         if (ValEquipos()) {
             try {
                 Equipos.Post(new EquipoModel(tboxsNombre.getText(), tboxsEstadio.getText(), new URI(tboxuEscudo.getText()), new URI(tboxuEstadio.getText())));
-                Listar();
+                Listar(Equipos.getEquipos());
+                Vaciar();
             } catch (URISyntaxException ex) {
                 JOptionPane.showMessageDialog(null, "Ha ocurrido algun error intente de nuevo", "Error", 0);
             }
         }
     }//GEN-LAST:event_btnRegActionPerformed
 
-    public void Listar() {
+    private void btnModActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModActionPerformed
+        if (ValEquipos() && Index != null) {
+            try {
+                Equipos.Put(Integer.parseInt(Index.toString()), new EquipoModel(tboxsNombre.getText(), tboxsEstadio.getText(), new URI(tboxuEscudo.getText()), new URI(tboxuEstadio.getText())));
+                Listar(Equipos.getEquipos());
+                Vaciar();
+            } catch (URISyntaxException ex) {
+                JOptionPane.showMessageDialog(null, "Ha ocurrido algun error intente de nuevo", "Error", 0);
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Debe seleccionar alguna fila de la tabla", "Error", 0);
+        }
+    }//GEN-LAST:event_btnModActionPerformed
+
+    private void TableEquiposMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableEquiposMouseClicked
+        Index = TableEquipos.getSelectedRow();
+        tboxsNombre.setText(Equipos.getEquipos().get(Integer.parseInt(Index.toString())).getsNombre());
+        tboxsEstadio.setText(Equipos.getEquipos().get(Integer.parseInt(Index.toString())).getsEstadio());
+        tboxuEscudo.setText(Equipos.getEquipos().get(Integer.parseInt(Index.toString())).getuEscudo().toString());
+        tboxuEstadio.setText(Equipos.getEquipos().get(Integer.parseInt(Index.toString())).getuEstadio().toString());
+    }//GEN-LAST:event_TableEquiposMouseClicked
+
+    public void Listar(ArrayList<EquipoModel> Equipos) {
         while (Table.getRowCount() != 0) {
             Table.removeRow(0);
         }
-        Equipos.getEquipos().forEach((Equipo) -> {
+        Equipos.forEach((Equipo) -> {
             Table.addRow(Equipo.Tabla());
         });
+    }
+
+    private boolean ValEquipos() {
+        if (tboxsNombre.getText().equals("") || tboxsNombre.getText() == null || tboxsEstadio.getText().equals("") || tboxsEstadio.getText() == null
+                || tboxuEscudo.getText().equals("") || tboxuEscudo.getText() == null || tboxuEstadio.getText().equals("") || tboxuEstadio.getText() == null) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar todos los campos requeridos", "Error", 0);
+            return false;
+        } else if (!Equipos.ValUrl(tboxuEscudo.getText()) || !Equipos.ValUrl(tboxuEstadio.getText())) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar solo url de imagen", "Error", 0);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private void Vaciar() {
+        tboxsEstadio.setText(null);
+        tboxsNombre.setText(null);
+        tboxsbuscar.setText(null);
+        tboxuEscudo.setText(null);
+        tboxuEstadio.setText(null);
+        Index = null;
     }
 
     public static void main(String args[]) {

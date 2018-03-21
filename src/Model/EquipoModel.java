@@ -35,6 +35,6 @@ public class EquipoModel implements Serializable{
     }
     
     public String[] Tabla(){
-     return new String[] {getsNombre(), getsEstadio(), getuEscudo().getPath(), getuEstadio().getPath()};
+     return new String[] {getsNombre(), getsEstadio(), getuEscudo().toString(), getuEstadio().toString()};
     }
 }
