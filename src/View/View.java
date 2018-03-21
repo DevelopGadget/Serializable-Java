@@ -120,6 +120,11 @@ public class View extends javax.swing.JFrame {
 
         btnElim.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Delete.png"))); // NOI18N
         btnElim.setText("Eliminar");
+        btnElim.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnElimActionPerformed(evt);
+            }
+        });
 
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Find.png"))); // NOI18N
         btnBuscar.setText("Buscar");
@@ -286,6 +291,16 @@ public class View extends javax.swing.JFrame {
             pbEscudo.setIcon(new ImageIcon(ImageIO.read(Equipos.getEquipos().get(Integer.parseInt(Index.toString())).getuEscudo()).getScaledInstance(pbEstadio.getWidth(), pbEstadio.getHeight(), Image.SCALE_SMOOTH)));
         } catch (MalformedURLException ex) {} catch (IOException ex) {}
     }//GEN-LAST:event_TableEquiposMouseClicked
+
+    private void btnElimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnElimActionPerformed
+        if(Index != null){
+            Equipos.Delete(Integer.parseInt(Index.toString()));
+            Vaciar();
+            Listar(Equipos.getEquipos());
+        }else{
+            JOptionPane.showMessageDialog(null, "Debe seleccionar alguna fila de la tabla", "Error", 0);
+        }
+    }//GEN-LAST:event_btnElimActionPerformed
 
     public void Listar(ArrayList<EquipoModel> Equipos) {
         while (Table.getRowCount() != 0) {
