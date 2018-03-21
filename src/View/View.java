@@ -2,9 +2,13 @@ package View;
 
 import Controller.EquipoController;
 import Model.EquipoModel;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.awt.Image;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -250,10 +254,10 @@ public class View extends javax.swing.JFrame {
     private void btnRegActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegActionPerformed
         if (ValEquipos()) {
             try {
-                Equipos.Post(new EquipoModel(tboxsNombre.getText(), tboxsEstadio.getText(), new URI(tboxuEscudo.getText()), new URI(tboxuEstadio.getText())));
+                Equipos.Post(new EquipoModel(tboxsNombre.getText(), tboxsEstadio.getText(), new URL(tboxuEscudo.getText()), new URL(tboxuEstadio.getText())));
                 Listar(Equipos.getEquipos());
                 Vaciar();
-            } catch (URISyntaxException ex) {
+            } catch (MalformedURLException ex) {
                 JOptionPane.showMessageDialog(null, "Ha ocurrido algun error intente de nuevo", "Error", 0);
             }
         }
@@ -262,12 +266,10 @@ public class View extends javax.swing.JFrame {
     private void btnModActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModActionPerformed
         if (ValEquipos() && Index != null) {
             try {
-                Equipos.Put(Integer.parseInt(Index.toString()), new EquipoModel(tboxsNombre.getText(), tboxsEstadio.getText(), new URI(tboxuEscudo.getText()), new URI(tboxuEstadio.getText())));
+                Equipos.Put(Integer.parseInt(Index.toString()), new EquipoModel(tboxsNombre.getText(), tboxsEstadio.getText(), new URL(tboxuEscudo.getText()), new URL(tboxuEstadio.getText())));
                 Listar(Equipos.getEquipos());
                 Vaciar();
-            } catch (URISyntaxException ex) {
-                JOptionPane.showMessageDialog(null, "Ha ocurrido algun error intente de nuevo", "Error", 0);
-            }
+            } catch (MalformedURLException ex) { JOptionPane.showMessageDialog(null, "Ha ocurrido algun error intente de nuevo", "Error", 0);}
         }else{
             JOptionPane.showMessageDialog(null, "Debe seleccionar alguna fila de la tabla", "Error", 0);
         }
@@ -279,6 +281,10 @@ public class View extends javax.swing.JFrame {
         tboxsEstadio.setText(Equipos.getEquipos().get(Integer.parseInt(Index.toString())).getsEstadio());
         tboxuEscudo.setText(Equipos.getEquipos().get(Integer.parseInt(Index.toString())).getuEscudo().toString());
         tboxuEstadio.setText(Equipos.getEquipos().get(Integer.parseInt(Index.toString())).getuEstadio().toString());
+        try {
+            pbEstadio.setIcon(new ImageIcon(ImageIO.read(Equipos.getEquipos().get(Integer.parseInt(Index.toString())).getuEstadio()).getScaledInstance(pbEstadio.getWidth(), pbEstadio.getHeight(), Image.SCALE_SMOOTH)));
+            pbEscudo.setIcon(new ImageIcon(ImageIO.read(Equipos.getEquipos().get(Integer.parseInt(Index.toString())).getuEscudo()).getScaledInstance(pbEstadio.getWidth(), pbEstadio.getHeight(), Image.SCALE_SMOOTH)));
+        } catch (MalformedURLException ex) {} catch (IOException ex) {}
     }//GEN-LAST:event_TableEquiposMouseClicked
 
     public void Listar(ArrayList<EquipoModel> Equipos) {
@@ -310,6 +316,8 @@ public class View extends javax.swing.JFrame {
         tboxuEscudo.setText(null);
         tboxuEstadio.setText(null);
         Index = null;
+        pbEscudo.setIcon(null);
+        pbEstadio.setIcon(null);
     }
 
     public static void main(String args[]) {

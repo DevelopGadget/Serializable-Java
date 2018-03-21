@@ -2,16 +2,16 @@
 package Model;
 
 import java.io.Serializable;
-import java.net.URI;
+import java.net.URL;
 
 public class EquipoModel implements Serializable{
     
     private String sNombre;
     private String sEstadio;
-    private URI uEstadio;
-    private URI uEscudo;
+    private URL uEstadio;
+    private URL uEscudo;
 
-    public EquipoModel(String sNombre, String sEstadio, URI uEstadio, URI uEscudo) {
+    public EquipoModel(String sNombre, String sEstadio, URL uEstadio, URL uEscudo) {
         this.sNombre = sNombre;
         this.sEstadio = sEstadio;
         this.uEstadio = uEstadio;
@@ -26,11 +26,11 @@ public class EquipoModel implements Serializable{
         return sEstadio;
     }
 
-    public URI getuEstadio() {
+    public URL getuEstadio() {
         return uEstadio;
     }
 
-    public URI getuEscudo() {
+    public URL getuEscudo() {
         return uEscudo;
     }
     
