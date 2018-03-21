@@ -1,9 +1,10 @@
 
 package Model;
 
+import java.io.Serializable;
 import java.net.URI;
 
-public class EquipoModel {
+public class EquipoModel implements Serializable{
     
     private String sNombre;
     private String sEstadio;
