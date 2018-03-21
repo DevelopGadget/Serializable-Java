@@ -18,19 +18,23 @@ public class EquipoModel implements Serializable{
         this.uEscudo = uEscudo;
     }
 
-    public void setsNombre(String sNombre) {
-        this.sNombre = sNombre;
+    public String getsNombre() {
+        return sNombre;
     }
 
-    public void setsEstadio(String sEstadio) {
-        this.sEstadio = sEstadio;
+    public String getsEstadio() {
+        return sEstadio;
     }
 
-    public void setuEstadio(URI uEstadio) {
-        this.uEstadio = uEstadio;
+    public URI getuEstadio() {
+        return uEstadio;
     }
 
-    public void setuEscudo(URI uEscudo) {
-        this.uEscudo = uEscudo;
+    public URI getuEscudo() {
+        return uEscudo;
+    }
+    
+    public String[] Tabla(){
+     return new String[] {getsNombre(), getsEstadio(), getuEscudo().getPath(), getuEstadio().getPath()};
     }
 }

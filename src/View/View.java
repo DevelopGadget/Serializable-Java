@@ -1,31 +1,37 @@
-
 package View;
 
 import Controller.EquipoController;
+import Model.EquipoModel;
+import java.net.URI;
+import java.net.URISyntaxException;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 public class View extends javax.swing.JFrame {
 
     private EquipoController Equipos = new EquipoController();
-    
+    private final DefaultTableModel Table;
+
     public View() {
         initComponents();
         setLocationRelativeTo(null);
+        this.Table = (DefaultTableModel) TableEquipos.getModel();
+        Listar();
     }
-    
-    private boolean ValEquipos(){
-        if(tboxsNombre.getText().equals("") || tboxsNombre.getText() == null || tboxsEstadio.getText().equals("") || tboxsEstadio.getText() == null ||
-           tboxuEscudo.getText().equals("") || tboxuEscudo.getText() == null || tboxuEstadio.getText().equals("") || tboxuEstadio.getText() == null){
+
+    private boolean ValEquipos() {
+        if (tboxsNombre.getText().equals("") || tboxsNombre.getText() == null || tboxsEstadio.getText().equals("") || tboxsEstadio.getText() == null
+                || tboxuEscudo.getText().equals("") || tboxuEscudo.getText() == null || tboxuEstadio.getText().equals("") || tboxuEstadio.getText() == null) {
             JOptionPane.showMessageDialog(null, "Debe ingresar todos los campos requeridos", "Error", 0);
             return false;
-        }else if(!Equipos.ValUrl(tboxuEscudo.getText()) || !Equipos.ValUrl(tboxuEstadio.getText())){
+        } else if (!Equipos.ValUrl(tboxuEscudo.getText()) || !Equipos.ValUrl(tboxuEstadio.getText())) {
             JOptionPane.showMessageDialog(null, "Debe ingresar solo url de imagen", "Error", 0);
             return false;
-        }else{
+        } else {
             return true;
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -244,8 +250,24 @@ public class View extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegActionPerformed
-        ValEquipos();
+        if (ValEquipos()) {
+            try {
+                Equipos.Post(new EquipoModel(tboxsNombre.getText(), tboxsEstadio.getText(), new URI(tboxuEscudo.getText()), new URI(tboxuEstadio.getText())));
+                Listar();
+            } catch (URISyntaxException ex) {
+                JOptionPane.showMessageDialog(null, "Ha ocurrido algun error intente de nuevo", "Error", 0);
+            }
+        }
     }//GEN-LAST:event_btnRegActionPerformed
+
+    public void Listar() {
+        while (Table.getRowCount() != 0) {
+            Table.removeRow(0);
+        }
+        Equipos.getEquipos().forEach((Equipo) -> {
+            Table.addRow(Equipo.Tabla());
+        });
+    }
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

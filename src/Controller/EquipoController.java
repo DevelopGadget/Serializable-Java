@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 
 public class EquipoController {
 
-    private ArrayList Equipos = new ArrayList<EquipoModel>();
+    private ArrayList<EquipoModel> Equipos = new ArrayList<EquipoModel>();
 
     public EquipoController() {
     }
@@ -38,7 +38,7 @@ public class EquipoController {
         }
     }
 
-    public ArrayList getEquipos() {
+    public ArrayList<EquipoModel> getEquipos() {
         return Equipos;
     }
 
