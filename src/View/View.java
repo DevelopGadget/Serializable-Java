@@ -1,13 +1,31 @@
 
 package View;
 
+import Controller.EquipoController;
+import javax.swing.JOptionPane;
+
 public class View extends javax.swing.JFrame {
 
+    private EquipoController Equipos = new EquipoController();
+    
     public View() {
         initComponents();
         setLocationRelativeTo(null);
     }
-
+    
+    private boolean ValEquipos(){
+        if(tboxsNombre.getText().equals("") || tboxsNombre.getText() == null || tboxsEstadio.getText().equals("") || tboxsEstadio.getText() == null ||
+           tboxuEscudo.getText().equals("") || tboxuEscudo.getText() == null || tboxuEstadio.getText().equals("") || tboxuEstadio.getText() == null){
+            JOptionPane.showMessageDialog(null, "Debe ingresar todos los campos requeridos", "Error", 0);
+            return false;
+        }else if(!Equipos.ValUrl(tboxuEscudo.getText()) || !Equipos.ValUrl(tboxuEstadio.getText())){
+            JOptionPane.showMessageDialog(null, "Debe ingresar solo url de imagen", "Error", 0);
+            return false;
+        }else{
+            return true;
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -86,6 +104,11 @@ public class View extends javax.swing.JFrame {
 
         btnReg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Add.png"))); // NOI18N
         btnReg.setText("Registrar");
+        btnReg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegActionPerformed(evt);
+            }
+        });
 
         btnElim.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Delete.png"))); // NOI18N
         btnElim.setText("Eliminar");
@@ -219,6 +242,10 @@ public class View extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnRegActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegActionPerformed
+        ValEquipos();
+    }//GEN-LAST:event_btnRegActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
