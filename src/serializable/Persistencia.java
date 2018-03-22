@@ -8,7 +8,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
-public class Serializable {
+public class Persistencia {
 
     private File fichero;
     private FileInputStream archivo;
@@ -25,15 +25,15 @@ public class Serializable {
                 return obj_archivo.readObject();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Ha ocurrido un error con el archivo");
-                return false;
+                return null;
             }
         } else {
-            return true;
+            return null;
         }
 
     }
 
-    private void Escribir(String Url, ArrayList Array) {
+    public void Escribir(String Url, ArrayList Array) {
         try {
             persisten = new FileOutputStream(Url);
             obj_persiten = new ObjectOutputStream(persisten);

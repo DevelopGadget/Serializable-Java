@@ -11,10 +11,12 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import serializable.Persistencia;
 
 public class View extends javax.swing.JFrame {
 
     private EquipoController Equipos = new EquipoController();
+    private Persistencia Persistencia = new Persistencia();
     private final DefaultTableModel Table;
     private Object Index;
 
@@ -22,6 +24,7 @@ public class View extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         this.Table = (DefaultTableModel) TableEquipos.getModel();
+        Equipos.setEquipos((ArrayList<EquipoModel>) Persistencia.cargar_datos("Array.dat"));
         Listar(Equipos.getEquipos());
     }
 
@@ -278,6 +281,7 @@ public class View extends javax.swing.JFrame {
                 Equipos.Post(new EquipoModel(tboxsNombre.getText(), tboxsEstadio.getText(), new URL(tboxuEscudo.getText()), new URL(tboxuEstadio.getText())));
                 Listar(Equipos.getEquipos());
                 Vaciar();
+                Persistencia.Escribir("Array.dat", Equipos.getEquipos());
                 JOptionPane.showMessageDialog(null, "Se ha registrado satisfactoriamente", "Registrado", 1);
             } catch (MalformedURLException ex) {
                 JOptionPane.showMessageDialog(null, "Ha ocurrido algun error intente de nuevo", "Error", 0);
@@ -292,8 +296,10 @@ public class View extends javax.swing.JFrame {
                 Listar(Equipos.getEquipos());
                 Vaciar();
                 JOptionPane.showMessageDialog(null, "Se ha modificado satisfactoriamente", "Modificado", 1);
-            } catch (MalformedURLException ex) { JOptionPane.showMessageDialog(null, "Ha ocurrido algun error intente de nuevo", "Error", 0);}
-        }else{
+            } catch (MalformedURLException ex) {
+                JOptionPane.showMessageDialog(null, "Ha ocurrido algun error intente de nuevo", "Error", 0);
+            }
+        } else {
             JOptionPane.showMessageDialog(null, "Debe seleccionar alguna fila de la tabla", "Error", 0);
         }
     }//GEN-LAST:event_btnModActionPerformed
@@ -307,24 +313,26 @@ public class View extends javax.swing.JFrame {
         try {
             pbEstadio.setIcon(new ImageIcon(ImageIO.read(Equipos.getEquipos().get(Integer.parseInt(Index.toString())).getuEstadio()).getScaledInstance(pbEstadio.getWidth(), pbEstadio.getHeight(), Image.SCALE_SMOOTH)));
             pbEscudo.setIcon(new ImageIcon(ImageIO.read(Equipos.getEquipos().get(Integer.parseInt(Index.toString())).getuEscudo()).getScaledInstance(pbEstadio.getWidth(), pbEstadio.getHeight(), Image.SCALE_SMOOTH)));
-        } catch (MalformedURLException ex) {} catch (IOException ex) {}
+        } catch (MalformedURLException ex) {
+        } catch (IOException ex) {
+        }
     }//GEN-LAST:event_TableEquiposMouseClicked
 
     private void btnElimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnElimActionPerformed
-        if(Index != null){
+        if (Index != null) {
             Equipos.Delete(Integer.parseInt(Index.toString()));
             Vaciar();
             Listar(Equipos.getEquipos());
             JOptionPane.showMessageDialog(null, "Se ha eliminado satisfactoriamente", "Eliminado", 1);
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Debe seleccionar alguna fila de la tabla", "Error", 0);
         }
     }//GEN-LAST:event_btnElimActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        if(tboxsbuscar.getText() != null && !tboxsbuscar.getText().equals("")){
+        if (tboxsbuscar.getText() != null && !tboxsbuscar.getText().equals("")) {
             Listar(Equipos.Get(tboxsbuscar.getText()));
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Debe ingresar algun filtro", "Error", 0);
         }
     }//GEN-LAST:event_btnBuscarActionPerformed

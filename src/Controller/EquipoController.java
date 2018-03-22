@@ -11,7 +11,8 @@ public class EquipoController {
 
     private ArrayList<EquipoModel> Equipos = new ArrayList<EquipoModel>();
 
-    public EquipoController() {}
+    public EquipoController() {
+    }
 
     public void Post(EquipoModel Equipo) {
         Equipos.add(Equipo);
@@ -48,6 +49,12 @@ public class EquipoController {
 
     public ArrayList<EquipoModel> getEquipos() {
         return Equipos;
+    }
+
+    public void setEquipos(ArrayList<EquipoModel> Equipos) {
+        if (Equipos != null) {
+            this.Equipos = Equipos;
+        }
     }
 
 }
